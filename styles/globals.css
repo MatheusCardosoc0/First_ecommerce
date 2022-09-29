@@ -618,6 +618,9 @@ margin-top: 160px;
 .product-max-qty{
   margin-top: 10px;
 }
+.image-container{
+  width: 30rem;
+}
 
 @media screen and (max-width:800px) {
   .hero-banner-container{
