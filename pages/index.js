@@ -6,7 +6,7 @@ import { client } from '../lib/client'
 const Home = ({ products, bannerData}) => {
   return (
     <div>
-      <HeroBanner bannerData={bannerData.length && bannerData[0]}/>
+      <HeroBanner heroBanner={bannerData.length && bannerData[0]}/>
       {console.log(bannerData)}
 
       <div className='products-heading'>
@@ -16,11 +16,11 @@ const Home = ({ products, bannerData}) => {
 
       <div className='products-container'>
         {products?.map((product) => 
-          product.name
+          <Product key={product._id} product={product} />
         )}
       </div>
 
-      footer
+      <FooterBanner FooterBanner={bannerData && bannerData[0]} />
     </div>
   )
 }
