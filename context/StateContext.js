@@ -10,10 +10,13 @@ export const StateContext = ({ children }) => {
   const [TotalQuantity, setTotalQuantity] = useState(0)
   const [Qty, setQty] = useState(1)
 
-  console.log(TotalQuantity)
+  let foundProduct
+  let index
 
   const onAdd = (product, quantity) => {
-    const checkProductInCart = CartItems.find(item => item?._id === product?._id)
+    const checkProductInCart = CartItems.find(
+      item => item?._id === product?._id
+    )
 
     setTotalPrice(prevTotalPrice => prevTotalPrice + product.price * quantity)
     setTotalQuantity(prevTotalQuantity => prevTotalQuantity + quantity)
@@ -38,6 +41,29 @@ export const StateContext = ({ children }) => {
     toast.success(`${Qty} ${product.name} adicionado ao carrinho`)
   }
 
+  const toggleCartItemQuantity = (id, value) => {
+    foundProduct = CartItems.find(item => item._id === id)
+    index = CartItems.findIndex(product => product._id === id)
+
+    if (value === 'inc') {
+      setCartItems([
+        ...CartItems,
+        { ...foundProduct, quantity: foundProduct.quantity + 1 }
+      ])
+      setTotalPrice(prevTotalPrice => prevTotalPrice + foundProduct.price)
+      setTotalQuantity(prevTotalQuantities => prevTotalQuantities + 1)
+    } else if (value === 'dec') {
+      if (foundProduct.quantity > 1) {
+        setCartItems([
+          ...CartItems,
+          { ...foundProduct, quantity: foundProduct.quantity - 1 }
+        ])
+        setTotalPrice(prevTotalPrice => prevTotalPrice - foundProduct.price)
+        setTotalQuantity(prevTotalQuantities => prevTotalQuantities - 1)
+      }
+    }
+  }
+
   const incQty = () => {
     setQty(prevQty => prevQty + 1)
   }
@@ -54,6 +80,7 @@ export const StateContext = ({ children }) => {
     <Context.Provider
       value={{
         showCart,
+        setShowCart,
         CartItems,
         Qty,
         TotalPrice,
@@ -61,7 +88,7 @@ export const StateContext = ({ children }) => {
         incQty,
         decQty,
         onAdd,
-        setShowCart
+        toggleCartItemQuantity
       }}
     >
       {children}

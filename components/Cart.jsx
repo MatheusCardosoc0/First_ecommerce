@@ -13,7 +13,7 @@ import { urlFor } from '../lib/client'
 const Cart = () => {
   const cartRef = useRef()
 
-  const { TotalPrice, TotalQuantity, CartItems, setShowCart } =
+  const { TotalPrice, TotalQuantity, CartItems, setShowCart, toggleCartItemQuantity } =
     useStateContext()
 
   return (
@@ -63,11 +63,13 @@ const Cart = () => {
                         <div className="quantity">
                           <h3>Quantidade: </h3>
                           <p className="quantity-desc">
-                            <span className="minus">
+                            <span className="minus"
+                            onClick={() => toggleCartItemQuantity((item._id), 'dec')}>
                               <AiOutlineMinus />
                             </span>
-                            <span className="num">0</span>
-                            <span className="minus">
+                            <span className="num">{item.quantity}</span>
+                            <span className="minus"
+                            onClick={() => toggleCartItemQuantity((item._id), 'inc')}>
                               <AiOutlinePlus />
                             </span>
                           </p>
