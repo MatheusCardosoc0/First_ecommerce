@@ -13,8 +13,14 @@ import { urlFor } from '../lib/client'
 const Cart = () => {
   const cartRef = useRef()
 
-  const { TotalPrice, TotalQuantity, CartItems, setShowCart, toggleCartItemQuantity } =
-    useStateContext()
+  const {
+    TotalPrice,
+    TotalQuantity,
+    CartItems,
+    setShowCart,
+    toggleCartItemQuantity,
+    onRemove
+  } = useStateContext()
 
   return (
     <div className="cart-wrapper" ref={cartRef}>
@@ -63,13 +69,21 @@ const Cart = () => {
                         <div className="quantity">
                           <h3>Quantidade: </h3>
                           <p className="quantity-desc">
-                            <span className="minus"
-                            onClick={() => toggleCartItemQuantity((item._id), 'dec')}>
+                            <span
+                              className="minus"
+                              onClick={() =>
+                                toggleCartItemQuantity(item._id, 'dec')
+                              }
+                            >
                               <AiOutlineMinus />
                             </span>
                             <span className="num">{item.quantity}</span>
-                            <span className="minus"
-                            onClick={() => toggleCartItemQuantity((item._id), 'inc')}>
+                            <span
+                              className="minus"
+                              onClick={() =>
+                                toggleCartItemQuantity(item._id, 'inc')
+                              }
+                            >
                               <AiOutlinePlus />
                             </span>
                           </p>
@@ -77,7 +91,7 @@ const Cart = () => {
                         <button
                           type="button"
                           className="remove-item"
-                          onClick=""
+                          onClick={() => onRemove(item)}
                         >
                           <TiDeleteOutline />
                         </button>
