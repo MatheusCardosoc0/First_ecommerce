@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRef } from 'react'
+import toast from 'react-hot-toast'
 import {
   AiOutlineLeft,
   AiOutlineMinus,
@@ -9,6 +10,7 @@ import {
 import { TiDeleteOutline } from 'react-icons/ti'
 import { useStateContext } from '../context/StateContext'
 import { urlFor } from '../lib/client'
+import getStripe from '../lib/getStripe'
 
 const Cart = () => {
   const cartRef = useRef()
@@ -21,6 +23,26 @@ const Cart = () => {
     toggleCartItemQuantity,
     onRemove
   } = useStateContext()
+
+  const handleCheckout = async () => {
+    const stripe = await getStripe()
+
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(CartItems)
+    })
+
+    if (response.statusCode === 500) return
+
+    const data = await response.json()
+
+    toast.loading('Redireting...')
+
+    stripe.redirectToCheckout({ sessionId: data.id })
+  }
 
   return (
     <div className="cart-wrapper" ref={cartRef}>
@@ -65,10 +87,10 @@ const Cart = () => {
                   </div>
                   <div className="flex bottom">
                     <div>
-                      <p className="quantity-desc">
+                      <div className="quantity-desc">
                         <div className="quantity">
                           <h3>Quantidade: </h3>
-                          <p className="quantity-desc">
+                          <div className="quantity-desc">
                             <span
                               className="minus"
                               onClick={() =>
@@ -86,7 +108,7 @@ const Cart = () => {
                             >
                               <AiOutlinePlus />
                             </span>
-                          </p>
+                          </div>
                         </div>
                         <button
                           type="button"
@@ -95,7 +117,7 @@ const Cart = () => {
                         >
                           <TiDeleteOutline />
                         </button>
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -109,7 +131,7 @@ const Cart = () => {
               <h3>${TotalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="btn">
+              <button type="button" className="btn" onClick={handleCheckout}>
                 Pague com Stripe
               </button>
             </div>

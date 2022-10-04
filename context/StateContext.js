@@ -20,7 +20,6 @@ export const StateContext = ({ children }) => {
 
     setTotalPrice(prevTotalPrice => prevTotalPrice + product.price * quantity)
     setTotalQuantity(prevTotalQuantity => prevTotalQuantity + quantity)
-    console.log(TotalPrice)
 
     if (checkProductInCart) {
       const updatedCartItems = CartItems.map(cartProduct => {
